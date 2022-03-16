@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
-from db import db
 
 from security import authenticate, identity
 from resources.user import UserRegister
@@ -15,15 +14,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'sam'
 api = Api(app)
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
-
 jwt = JWT(app, authenticate, identity) # /auth
 # config JWT to expire within half an hour
-
-db.init_app(app)
 
 
 api.add_resource(Store, '/store/<string:name>')
